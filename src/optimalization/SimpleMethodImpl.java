@@ -67,7 +67,7 @@ public class SimpleMethodImpl implements SimplexMethod {
     private void genRs(){
         for (int i = 1; i < (this.fullY - 1); i++) {
             Random ran = new Random();
-            this.matica[i][this.fullX - 1] = ran.nextInt(100);
+            this.matica[i][this.fullX - 1] = ran.nextInt(100) + 1;
         }
     }
 
@@ -98,8 +98,6 @@ public class SimpleMethodImpl implements SimplexMethod {
                         System.out.print("   -z");
                     }
                 } else {
-                    // Random ran = new Random();
-                    // System.out.print(" " + ran.nextInt(10));
                     if (i == (this.fullY - 1)) {
                         if (this.matica[i][j] < 0) {
                             System.out.print("   " + this.matica[i][j]);
@@ -115,6 +113,14 @@ public class SimpleMethodImpl implements SimplexMethod {
         }
     }
 
+    int najmensiaCena = 0;
+    int vahaNajmensieCena;
+
+    double najmensiPodiel;
+    int vahaNajmensiPodiel;
+
+    int pocetZapornych;
+
     @Override
     public void calculate() {
         while (true) {
@@ -122,6 +128,64 @@ public class SimpleMethodImpl implements SimplexMethod {
                 break;
             }
 
+            findSmallest();
+            findAllZaporne();
+            boolean mamCo = false;
+            int p = this.pocetZapornych;
+            while (p != 0) {
+                mamCo = prepocitajMaticu();
+                if (mamCo) {
+                    break;
+                }
+                p--;
+            }
+
+            System.out.println(this.najmensiPodiel + "     " + this.vahaNajmensiPodiel);
+
+            if (!mamCo) {
+                break;
+            }
+
+            break;
+        }
+    }
+
+    private void findAllZaporne() {
+        int p = 0;
+        for (int i = 1; i <= this.base; i++) {
+            if (this.matica[this.fullY - 1][i] < 0) {
+                p++;
+            }
+        }
+        this.pocetZapornych = p;
+    }
+
+    private boolean prepocitajMaticu() {
+        this.najmensiPodiel = (double) this.matica[1][this.fullX - 1] / (double) this.matica[1][this.vahaNajmensieCena];
+        this.vahaNajmensiPodiel = 1;
+        boolean mamCo = false;
+        for (int i = 1; i <= this.pomocne; i++) {
+            if (this.matica[i][this.vahaNajmensieCena] > 0) {
+                double podiel;
+                podiel = (double) this.matica[i][this.fullX - 1] / (double) this.matica[i][this.vahaNajmensieCena];
+                System.out.println(this.matica[i][this.fullX - 1] + " / " + this.matica[i][this.vahaNajmensieCena]);
+
+                if (podiel <= this.najmensiPodiel) {
+                    this.najmensiPodiel = podiel;
+                    this.vahaNajmensiPodiel = i;
+                    mamCo = true;
+                }
+            }
+        }
+        return mamCo;
+    }
+
+    private void findSmallest() {
+        for (int i = 1; i <= this.base; i++) {
+            if (this.matica[this.fullY - 1][i] < this.najmensiaCena) {
+                this.najmensiaCena = this.matica[this.fullY - 1][i];
+                this.vahaNajmensieCena = i;
+            }
         }
     }
 
@@ -132,5 +196,15 @@ public class SimpleMethodImpl implements SimplexMethod {
             }
         }
         return false;
+    }
+
+    private int najdiNajvacse(){
+        int najvacsie = this.matica[1][this.fullX - 1];
+        for(int i = 1; i < (this.fullY-1); i++){
+            if (this.matica[i][this.fullX - 1] > najvacsie) {
+                najvacsie = this.matica[i][this.fullX - 1];
+            }
+        }
+        return najvacsie;
     }
 }
