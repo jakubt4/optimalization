@@ -1,6 +1,6 @@
 package optimalization.api;
 
-public interface SimplexMethod {
+public interface GenerateSimpl {
 
     public void print();
 
