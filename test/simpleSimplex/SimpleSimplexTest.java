@@ -6,6 +6,7 @@ import org.junit.Test;
 public class SimpleSimplexTest {
 
     SimpleSimplex simplex;
+    GeneratorSimplex geneSimpl;
 
     // z = 2x1 + x2
     // -x1 + x2 + p1 = 2
@@ -41,7 +42,7 @@ public class SimpleSimplexTest {
 
     @Test
     public void simplexTest() {
-        this.simplex = new SimpleSimplex(this.testInputSimplex1, this.pomocne1);
+        this.simplex = new SimpleSimplex(this.testInputSimplex1, this.pomocne1, null, false);
         Assert.assertNotNull(this.simplex);
         this.simplex.start();
         System.out.println("*************************************************************");
@@ -49,7 +50,7 @@ public class SimpleSimplexTest {
 
     @Test
     public void simplex2Test() {
-        this.simplex = new SimpleSimplex(this.testInputSimplex2, this.pomocne2);
+        this.simplex = new SimpleSimplex(this.testInputSimplex2, this.pomocne2, null, false);
         Assert.assertNotNull(this.simplex);
         this.simplex.start();
         System.out.println("*************************************************************");
@@ -57,7 +58,7 @@ public class SimpleSimplexTest {
 
     @Test
     public void simplex3Test() {
-        this.simplex = new SimpleSimplex(this.testInputSimplex3, this.pomocne3);
+        this.simplex = new SimpleSimplex(this.testInputSimplex3, this.pomocne3, null, false);
         Assert.assertNotNull(this.simplex);
         this.simplex.start();
         System.out.println("*************************************************************");
@@ -65,9 +66,20 @@ public class SimpleSimplexTest {
 
     @Test
     public void simplex4Test() {
-        this.simplex = new SimpleSimplex(this.testInputSimplex4, this.pomocne4);
+        this.simplex = new SimpleSimplex(this.testInputSimplex4, this.pomocne4, null, false);
         Assert.assertNotNull(this.simplex);
         this.simplex.start();
         System.out.println("*************************************************************");
+    }
+
+    @Test
+    public void generujSimplexTest() {
+        for (int i = 0; i < 5; i++) {
+            this.geneSimpl = new GeneratorSimplex();
+            final String[][] testGeneratorOutput = this.geneSimpl.generuj();
+            this.simplex = new SimpleSimplex(testGeneratorOutput, this.geneSimpl.getPocetP(), null, false);
+            this.simplex.start();
+            System.out.println("*************************************************************");
+        }
     }
 }

@@ -2,6 +2,8 @@ package simpleSimplex;
 
 import java.awt.Point;
 
+import javax.swing.JTextArea;
+
 import simplex.Helper;
 import simplex.phases.Phase;
 import zlomky.Zlomok;
@@ -16,6 +18,8 @@ public class Phasing extends Phase {
     private final String[] leftTable;
     private final Zlomok zlomok;
     private boolean celeZle = false;
+    private JTextArea pocitane;
+    private boolean vypisujem;
 
     public Phasing(final String[][] input, final int pomocne) {
         this.input = input;
@@ -25,14 +29,33 @@ public class Phasing extends Phase {
         this.zlomok = new Zlomok();
     }
 
+    public Phasing(final String[][] input, final int pomocne, final JTextArea pocitane, final boolean vypisujem) {
+        this.input = input;
+        this.pomocne = pomocne;
+        this.pocitane = pocitane;
+        this.vypisujem = vypisujem;
+        this.topTable = new String[this.input[0].length];
+        this.leftTable = new String[pomocne];
+        this.zlomok = new Zlomok();
+    }
+
     @Override
     public String[][] start() {
-        Helper.print(this.input);
+        Helper.print(this.input, this.pocitane, this.vypisujem);
+        if (this.vypisujem) {
+            this.pocitane.setText(this.pocitane.getText() + "\n");
+        }
         System.out.println();
         zapisPremenne();
         vypisPremenne(this.topTable);
+        if (this.vypisujem) {
+            this.pocitane.setText(this.pocitane.getText() + "\n");
+        }
         System.out.println();
         vypisPremenne(this.leftTable);
+        if (this.vypisujem) {
+            this.pocitane.setText(this.pocitane.getText() + "\n");
+        }
         System.out.println();
 
         String[][] oldInput = new String[this.input.length][this.input[0].length];
@@ -41,6 +64,9 @@ public class Phasing extends Phase {
             this.pivot = findPivot(this.input);
 
             if (this.pivot == null) {
+                if (this.vypisujem) {
+                    this.pocitane.setText(this.pocitane.getText() + "Asi koniec.." + "\n");
+                }
                 System.out.println("Asi koniec.. ci ?");
                 if (!this.celeZle) {
                     dajVysledok();
@@ -49,17 +75,33 @@ public class Phasing extends Phase {
             }
 
             zamen();
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "Lava strana po zamene ->> ");
+            }
             System.out.print("Lava strana po zamene ->> ");
             vypisPremenne(this.leftTable);
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "\n");
+            }
             System.out.println();
 
             vydelMa();
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "Matica po deleni:" + "\n");
+            }
             System.out.println("Matica po deleni:");
-            Helper.print(this.input);
+            Helper.print(this.input, this.pocitane, this.vypisujem);
 
             iteruj();
-            Helper.print(this.input);
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "Matica po iterovani:" + "\n");
+            }
+            System.out.println("Matica po iterovani:");
+            Helper.print(this.input, this.pocitane, this.vypisujem);
 
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "---------------------------------" + "\n");
+            }
             System.out.println("---------------------------------");
         }
     }
@@ -67,13 +109,23 @@ public class Phasing extends Phase {
     private void dajVysledok() {
         for (int i = 0; i < (this.input.length - 1); i++) {
             if (this.leftTable[i].contains("x")) {
+                if (this.vypisujem) {
+                    this.pocitane.setText(this.pocitane.getText() + this.leftTable[i] + " = "
+                            + this.input[i][this.input[i].length - 1] + "\n");
+                }
                 System.out.println(this.leftTable[i] + " = " + this.input[i][this.input[i].length - 1]);
             }
         }
         final String z = this.input[this.input.length - 1][this.input[0].length - 1];
         if (this.zlomok.porovnaj(z, ">", "0")) {
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "z = " + z + "\n");
+            }
             System.out.println("z = " + z);
         } else {
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "Celeee zle.. ! z nesmie byt mensie ako 0." + "\n");
+            }
             System.out.println("Celeee zle.. ! z nesmie byt mensie ako 0.");
         }
     }
@@ -104,6 +156,9 @@ public class Phasing extends Phase {
                 }
             }
         }
+        if (this.vypisujem) {
+            this.pocitane.setText(this.pocitane.getText() + "\n");
+        }
         System.out.println();
     }
 
@@ -126,6 +181,9 @@ public class Phasing extends Phase {
 
     private void vypisPremenne(final String[] table) {
         for (final String s : table) {
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + s + " ");
+            }
             System.out.print(s + " ");
         }
     }
@@ -205,6 +263,10 @@ public class Phasing extends Phase {
                     }
                 }
             }
+            if (this.vypisujem) {
+                this.pocitane.setText(this.pocitane.getText() + "Najmensi ->> " + najmensi + "; stlpec ->> "
+                        + (najmenciPozicia + 1) + "\n");
+            }
             System.out.println("Najmensi ->> " + najmensi + "; stlpec ->> " + (najmenciPozicia + 1));
 
             for (int i = 0; i < (spodokTab - 1); i++) {
@@ -227,16 +289,25 @@ public class Phasing extends Phase {
                         }
                     }
                 }
+                break;
             }
             hladajSirku[najmenciPozicia] = false;
             pocitadlo++;
             if (pocitadlo == (pocetNajmensich)) {
+                if (this.vypisujem) {
+                    this.pocitane.setText(this.pocitane.getText()
+                            + "Nieco asi bude zle ...alebo to nema riesenie alebo degenerujeme..." + "\n");
+                }
                 System.out.println("Nieco asi bude zle ...alebo to nema riesenie alebo degenerujeme...");
                 this.celeZle = true;
                 return null;
             }
         }
         pivot = new Point(najmenciPozicia, optimalnyPivotPozicia);
+        if (this.vypisujem) {
+            this.pocitane.setText(this.pocitane.getText() + "Pivot  ->> " + optimalnyPivot + "; stlpec | riadok ->> "
+                    + (najmenciPozicia + 1) + " | " + (optimalnyPivotPozicia + 1) + "\n");
+        }
         System.out.println("Pivot  ->> " + optimalnyPivot + "; stlpec | riadok ->> " + (najmenciPozicia + 1) + " | "
                 + (optimalnyPivotPozicia + 1));
         return pivot;
