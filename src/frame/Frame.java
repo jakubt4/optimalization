@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import simpleSimplex.GeneratorSimplex;
 import simpleSimplex.SimpleSimplex;
 
 public class Frame extends JFrame {
@@ -38,7 +39,7 @@ public class Frame extends JFrame {
         final JTextArea pocitane = new JTextArea();
         pocitane.setBounds(230, 40, 360, 250);
         pocitane.setEditable(false);
-        
+
         final JScrollPane scrollFrame = new JScrollPane(pocitane);
         pocitane.setAutoscrolls(true);
         scrollFrame.setPreferredSize(new Dimension(360, 250));
@@ -50,6 +51,9 @@ public class Frame extends JFrame {
         pomocneField.setBounds(140, 310, 40, 30);
         final JButton pocitaj = new JButton("Pocitaj");
         pocitaj.setBounds(200, 310, 100, 30);
+        final JButton generuj = new JButton("Generuj");
+        generuj.setBounds(310, 310, 100, 30);
+
         pocitaj.addActionListener(new ActionListener() {
 
             @Override
@@ -110,13 +114,40 @@ public class Frame extends JFrame {
 
             }
         });
-        
+
+
+        generuj.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final GeneratorSimplex generatr = new GeneratorSimplex();
+                final String[][] outputGenerator = generatr.generuj();
+
+                String s = "";
+                for (int i = 0; i < outputGenerator.length; i++) {
+                    for (int j = 0; j < outputGenerator[0].length; j++) {
+                        if (j == (outputGenerator[0].length - 1)) {
+                            s = s + outputGenerator[i][j];
+                        } else {
+                            s = s + outputGenerator[i][j] + " ";
+                        }
+                    }
+                    s = s + "\n";
+                }
+                pomocneField.setText(String.valueOf(generatr.getPocetP()));
+                area.setText(s);
+                pocitaj.doClick();
+
+            }
+        });
+
         this.add(scrollFrame);
         this.add(pomocneField);
         this.add(pomocneLabel);
         this.add(pocitaj);
         this.add(area);
         this.add(label);
+        this.add(generuj);
 
         this.setVisible(true);
     }
