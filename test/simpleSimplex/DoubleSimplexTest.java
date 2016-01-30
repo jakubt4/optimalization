@@ -21,5 +21,6 @@ public class DoubleSimplexTest {
     @Test
     public void test() {
         final DoubleSimplex doubleSimplex = new DoubleSimplex(this.trstInputDoubleSimplex2, this.pomocne2, this.umele2);
+        doubleSimplex.start();
     }
 }

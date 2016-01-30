@@ -16,7 +16,7 @@ public class DoubleSimplex implements SimplexMethod {
 
     @Override
     public String[][] start() {
-        final Phase phase = new Phase();
+        final PhasingDouble phase = new PhasingDouble(this.input, this.pomocne, this.umele);
         return null;
     }
 
