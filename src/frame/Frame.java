@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,9 +22,9 @@ public class Frame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public void init() {
-        this.setSize(600, 400);
+        this.setSize(700, 400);
         this.setTitle("Simplexing");
-
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(null);
 
         final JTextArea area = new JTextArea();
@@ -37,15 +38,15 @@ public class Frame extends JFrame {
         area.setBorder(BorderFactory.createBevelBorder(0));
 
         final JTextArea pocitane = new JTextArea();
-        pocitane.setBounds(230, 40, 360, 250);
+        pocitane.setBounds(230, 40, 400, 250);
         pocitane.setEditable(false);
 
         final JScrollPane scrollFrame = new JScrollPane(pocitane);
         pocitane.setAutoscrolls(true);
-        scrollFrame.setPreferredSize(new Dimension(360, 250));
+        scrollFrame.setPreferredSize(new Dimension(400, 250));
         scrollFrame.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         final JLabel pomocneLabel = new JLabel("Pocet pomocnych");
-        scrollFrame.setBounds(230, 40, 360, 250);
+        scrollFrame.setBounds(230, 40, 400, 250);
         pomocneLabel.setBounds(10, 310, 125, 30);
         final JTextField pomocneField = new JTextField();
         pomocneField.setBounds(140, 310, 40, 30);
@@ -53,11 +54,18 @@ public class Frame extends JFrame {
         pocitaj.setBounds(200, 310, 100, 30);
         final JButton generuj = new JButton("Generuj");
         generuj.setBounds(310, 310, 100, 30);
+        this.setResizable(false);
 
         pocitaj.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
+
+                if ((area.getText().equals("")) || (pomocneField.getText().equals(""))) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Nemate nastaveny pocet premennych alebo maticu!",
+                            "WARNING", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 pocitane.setText("");
                 final String input = area.getText();
                 char kontrolny = ' ';

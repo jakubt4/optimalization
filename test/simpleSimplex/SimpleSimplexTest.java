@@ -1,6 +1,7 @@
 package simpleSimplex;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SimpleSimplexTest {
@@ -72,6 +73,7 @@ public class SimpleSimplexTest {
         System.out.println("*************************************************************");
     }
 
+    @Ignore
     @Test
     public void generujSimplexTest() {
         for (int i = 0; i < 5; i++) {
