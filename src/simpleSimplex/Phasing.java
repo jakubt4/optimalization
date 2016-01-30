@@ -5,10 +5,9 @@ import java.awt.Point;
 import javax.swing.JTextArea;
 
 import simplex.Helper;
-import simplex.phases.Phase;
 import zlomky.Zlomok;
 
-public class Phasing extends Phase {
+public class Phasing {
 
     private final String[][] input;
     private String change[];
@@ -39,7 +38,6 @@ public class Phasing extends Phase {
         this.zlomok = new Zlomok();
     }
 
-    @Override
     public String[][] start() {
         Helper.print(this.input, this.pocitane, this.vypisujem);
         if (this.vypisujem) {
@@ -227,11 +225,11 @@ public class Phasing extends Phase {
         String optimalnyPivot = "";
         int optimalnyPivotPozicia = 0;
         int pocetNajmensich = 0;
-        
+
         for(int i = 0; i < (sirkaTab);i++){
             hladajSirku[i] = true;
         }
-        
+
         for(int i = 0; i < sirkaTab; i++){
             if(hladajSirku[i]){
                 if(this.zlomok.porovnaj(input[spodokTab][i], "<", "0")){
@@ -242,7 +240,7 @@ public class Phasing extends Phase {
                 }
             }
         }
-        
+
         if(!mozemHladat){
             return null;
         }
